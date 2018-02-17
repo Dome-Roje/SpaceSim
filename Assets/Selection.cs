@@ -23,6 +23,12 @@ public class Selection : MonoBehaviour {
         }
     }
 
+    public static Vector2 ScreentoWorld(Vector2 screen)
+    {
+        Debug.Log("Function call works");
+        return new Vector2(1,1);
+    }
+
     public static Texture2D WhiteTexture
     {
         get
@@ -104,8 +110,16 @@ public class Selection : MonoBehaviour {
             rect = GetScreenRect(mousePosition1, Input.mousePosition);
             DrawScreenRect(rect, new Color(0.8f, 0.8f, 0.95f, 0.25f));
             DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
-            Collider2D random = Physics2D.OverlapArea(new Vector2(1,1), new Vector2(-1, -1));
-            Debug.Log(random.gameObject.transform.name);
+            //Debug.Log(Input.mousePosition);
+            Vector2 b = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 a = (Vector2)Camera.main.ScreenToWorldPoint(mousePosition1);
+            var random = Physics2D.OverlapAreaAll(a, b);
+            if (random.Length == 0) Debug.Log("Empty");
+            for(int i=0; i<random.Length; i++)
+            {
+                Debug.Log(random[i].gameObject.transform.name);
+                random[i].gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+            }
         }
     }
 
